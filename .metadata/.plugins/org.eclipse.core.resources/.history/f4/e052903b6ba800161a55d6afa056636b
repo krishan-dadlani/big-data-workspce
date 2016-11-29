@@ -1,0 +1,24 @@
+package edu.nyu.rangefloatprofiler;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class RangeFloatMapper extends Mapper<LongWritable, Text, Text, FloatWritable> {
+	@Override
+	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+
+		String line = value.toString();
+		String[] lines = line.split("\n");
+
+		for (String data : lines) {
+			String[] token = data.split(",");
+			// specify the column index for which we need to find the range. In this case it is 2
+			System.out.println("token[2] :: " + token[2]);
+			context.write(new Text(token[2]), new FloatWritable(token[2].length()));
+		}
+	}
+}
